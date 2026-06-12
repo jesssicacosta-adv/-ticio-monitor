@@ -1,0 +1,22 @@
+name: Monitor Processos
+
+on:
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+jobs:
+  monitorar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Instalar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Instalar dependencias
+        run: pip install requests gspread google-auth google-api-python-client certifi
+      - name: Criar credenciais
+        run: echo '${{ secrets.CREDENCIAIS_GOOGLE }}' > credenciais_google.json
+      - name: Rodar monitor
+        run: python monitor_processos.py
